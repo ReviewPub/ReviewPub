@@ -1,0 +1,74 @@
+[
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Botany"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Biotechnology"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Biogeography, taxonomy"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Animal ethology, animal psychology"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Microbiology"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Biology, other"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Zoology"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Econometrics"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Ecology"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Macroeconomics"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Microeconomics"
+  }
+},
+{
+  "model": "review_pub.domain",
+  "fields": {
+    "name": "Toxicology (plants, invertebrates)"
+  }
+}
+]

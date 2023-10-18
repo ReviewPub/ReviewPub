@@ -1,0 +1,26 @@
+[
+{
+  "model": "review_pub.language",
+  "fields": {
+    "code": "PL",
+    "name_language": "Polski",
+    "name_english": "polish"
+  }
+},
+{
+  "model": "review_pub.language",
+  "fields": {
+    "code": "DE",
+    "name_language": "Deutsche",
+    "name_english": "german"
+  }
+},
+{
+  "model": "review_pub.language",
+  "fields": {
+    "code": "EN",
+    "name_language": "english",
+    "name_english": "english"
+  }
+}
+]

@@ -1,10 +1,27 @@
 from uuid import uuid4
 
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from .managers import DomainManager, LanguageManager
+
+
+def get_extension(filename):
+    extension = search(r'.*(\..*)$', filename)
+
+    if extension:
+        extension = extension.group(1)
+
+    return extension
+
+
+def random_path(instance, filename):
+    if type(instance) == User:
+        user_id = instance.id
+    else:
+        user_id = instance.user.id
+    return f'{user_id}/{uuid4().hex}{get_extension(filename)}'
 
 
 class Domain(models.Model):
@@ -14,7 +31,7 @@ class Domain(models.Model):
     objects = DomainManager()
 
     def natural_key(self):
-        return self.name
+        return (self.name,)
 
     def __str__(self):
         return self.name
@@ -29,7 +46,7 @@ class Language(models.Model):
     objects = LanguageManager()
 
     def natural_key(self):
-        return self.code
+        return (self.code,)
 
     def __str__(self):
         return self.name_english
@@ -41,10 +58,12 @@ class User(AbstractUser):
     languages = models.ManyToManyField(Language, verbose_name=_("spoken languages"), related_name="users")
 
     def natural_key(self):
-        return self.username
+        return (self.username,)
 
     def __str__(self):
-        return f"{self.last_name}, {self.first_name}"
+        if self.last_name and self.first_name:
+            return f"{self.last_name}, {self.first_name}"
+        return self.username
 
 
 class Paper(models.Model):
@@ -55,12 +74,22 @@ class Paper(models.Model):
         REJECTED = "REJECTED", _("Rejected")
 
     id = models.UUIDField(primary_key=True, editable=False, default=uuid4)
-    title = models.TextField(verbose_name=_("paper title"))
+    title = models.TextField(verbose_name=_("paper title"), unique=True)
+    filename = models.CharField(max_length=128)
+    file = models.FileField(upload_to=random_path)
     domains = models.ManyToManyField(Domain, related_name='papers', verbose_name=_("domain"))
     language = models.ForeignKey(Language, related_name='papers', on_delete=models.CASCADE, verbose_name=_("language"))
     keywords = models.TextField(verbose_name=_("keywords"), null=True, blank=True)
-    authors = models.ManyToManyField(User, related_name='papers', verbose_name=_("authors"))
-    date_submitted = models.DateField(auto_created=True, verbose_name=_("submission date"))
+    authors = models.ManyToManyField(
+        User,
+        related_name='papers',
+        verbose_name=_("authors")
+        # TODO: migrations do not work with following line returning:
+        # django.db.utils.OperationalError: no such table: auth_group
+        #
+        # limit_choices_to={"groups": Group.objects.get(name="authors")}
+    )
+    date_submitted = models.DateField(editable=False, auto_created=True, verbose_name=_("submission date"))
     date_approved = models.DateField(null=True, editable=False, verbose_name=_("approved date"))
     status = models.CharField(
         choices=PaperStatus.choices,
@@ -70,7 +99,7 @@ class Paper(models.Model):
     )
 
     def natural_key(self):
-        return self.title
+        return (self.title,)
 
     def __str__(self):
         return self.title[:50]
@@ -106,7 +135,7 @@ class Review(models.Model):
     feedback = models.TextField(verbose_name=_("Reviewer's feedback"))
 
     def natural_key(self):
-        return self.__str__()
+        return self.reviewer, self.paper
 
     def __str__(self):
         "-".join((str(self.reviewer), str(self.paper)))

@@ -1,0 +1,63 @@
+[
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "authors",
+    "permissions": [
+      [
+        "add_paper",
+        "review_pub",
+        "paper"
+      ],
+      [
+        "change_paper",
+        "review_pub",
+        "paper"
+      ],
+      [
+        "delete_paper",
+        "review_pub",
+        "paper"
+      ],
+      [
+        "view_paper",
+        "review_pub",
+        "paper"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "reviewers",
+    "permissions": [
+      [
+        "view_paper",
+        "review_pub",
+        "paper"
+      ],
+      [
+        "add_review",
+        "review_pub",
+        "review"
+      ],
+      [
+        "change_review",
+        "review_pub",
+        "review"
+      ],
+      [
+        "delete_review",
+        "review_pub",
+        "review"
+      ],
+      [
+        "view_review",
+        "review_pub",
+        "review"
+      ]
+    ]
+  }
+}
+]

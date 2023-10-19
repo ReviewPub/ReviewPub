@@ -89,8 +89,8 @@ class Paper(models.Model):
         #
         # limit_choices_to={"groups": Group.objects.get(name="authors")}
     )
-    date_submitted = models.DateField(editable=False, auto_created=True, verbose_name=_("submission date"))
-    date_approved = models.DateField(null=True, editable=False, verbose_name=_("approved date"))
+    date_submitted = models.DateTimeField(auto_now_add=True, editable=False, auto_created=True, verbose_name=_("submission date"))
+    date_approved = models.DateTimeField(auto_now_add=True, null=True, editable=False, verbose_name=_("approved date"))
     status = models.CharField(
         choices=PaperStatus.choices,
         default=PaperStatus.SUBMITTED,

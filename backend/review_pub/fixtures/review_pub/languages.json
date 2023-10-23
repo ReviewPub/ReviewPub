@@ -3,7 +3,7 @@
   "model": "review_pub.language",
   "fields": {
     "code": "PL",
-    "name_language": "Polski",
+    "name_language": "polski",
     "name_english": "polish"
   }
 },

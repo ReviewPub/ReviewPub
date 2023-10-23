@@ -129,3 +129,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # REVIEW_PUB settings
 AUTH_USER_MODEL = 'review_pub.User'
+
+# DRF settings
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.AllowAny',
+#     ],
+    # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'findbet_api.authentication.BearerTokenAuthentication',
+    #     # 'rest_framework.authentication.TokenAuthentication',
+    #     # 'rest_framework.authentication.SessionAuthentication'
+    # ),
+# }

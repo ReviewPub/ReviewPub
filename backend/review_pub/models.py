@@ -1,3 +1,4 @@
+from re import search
 from uuid import uuid4
 
 from django.contrib.auth.models import AbstractUser, Group
@@ -20,7 +21,7 @@ def random_path(instance, filename):
     if type(instance) == User:
         user_id = instance.id
     else:
-        user_id = instance.user.id
+        user_id = instance.owner.id
     return f'{user_id}/{uuid4().hex}{get_extension(filename)}'
 
 
@@ -89,8 +90,14 @@ class Paper(models.Model):
         #
         # limit_choices_to={"groups": Group.objects.get(name="authors")}
     )
-    date_submitted = models.DateTimeField(auto_now_add=True, editable=False, auto_created=True, verbose_name=_("submission date"))
-    date_approved = models.DateTimeField(auto_now_add=True, null=True, editable=False, verbose_name=_("approved date"))
+    owner = models.ForeignKey(
+        User,
+        related_name='owned_papers',
+        on_delete=models.PROTECT,
+        verbose_name=_("uploaded by")
+    )
+    date_submitted = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=_("submission date"))
+    date_approved = models.DateTimeField(null=True, blank=True, editable=False, verbose_name=_("approved date"))
     status = models.CharField(
         choices=PaperStatus.choices,
         default=PaperStatus.SUBMITTED,
@@ -129,13 +136,16 @@ class Review(models.Model):
     result = models.CharField(
         choices=ReviewResult.choices,
         null=True,
+        blank=True,
         max_length=20,
         verbose_name=_("review result")
     )
-    feedback = models.TextField(verbose_name=_("Reviewer's feedback"))
+    feedback = models.TextField(verbose_name=_("Reviewer's feedback"), null=True, blank=True)
+    date_requested = models.DateTimeField(auto_now_add=True, editable=False, verbose_name=_("requested date"))
+    date_completed = models.DateTimeField(null=True, blank=True, editable=False, verbose_name=_("requested date"))
 
     def natural_key(self):
         return self.reviewer, self.paper
 
     def __str__(self):
-        "-".join((str(self.reviewer), str(self.paper)))
+        return "-".join((str(self.reviewer), str(self.paper)))

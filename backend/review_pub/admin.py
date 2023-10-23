@@ -5,8 +5,11 @@ from .models import Domain, Language, Paper, Review, User
 admin.site.register(Domain)
 admin.site.register(Language)
 admin.site.register(Paper)
-admin.site.register(Review)
 
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('reviewer', 'paper', 'date_requested', 'status', 'date_completed', 'result')
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
